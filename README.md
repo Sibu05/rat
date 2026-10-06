@@ -67,7 +67,7 @@ cd backend && python3 compare_reference.py cjson redis git
 Compares computed metrics row-by-row against the reference CSVs
 (`~/Downloads/repo-references/`) for every object and author in each
 repository. All rows match exactly for cJSON (983), Redis (18 301) and
-git (62 601) at their reference commits.
+git (62 600) at their reference commits.
 
 ## Layout
 
@@ -82,3 +82,13 @@ frontend/     React dashboard (Vite)
 data/         cloned/uploaded repos and rat.db
 run.sh        one-command launcher
 ```
+
+## AI Declaration
+
+AI Declaration: Qoder (AI coding assistant) — reviewed.
+
+All source code in this repository was generated with the assistance of
+Qoder, an AI coding assistant, and was reviewed, tested, and understood by
+the author before submission. The computed metrics were validated exactly
+against the course reference data (81 884/81 884 rows across cJSON, Redis
+and git).
