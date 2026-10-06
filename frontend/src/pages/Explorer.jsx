@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { api } from '../api.js'
 import { useRepo } from './RepoLayout.jsx'
+import BackButton from '../components/BackButton.jsx'
 import { fmt, fmtDateTime, fmtFloat, fmtPct, sha7 } from '../util.js'
 
 const PAGE = 100
@@ -12,9 +13,15 @@ export default function Explorer() {
   const path = searchParams.get('path') || ''
   const kind = searchParams.get('kind') || 'directory'
 
+  const parent = path ? path.split('/').slice(0, -1).join('/') : ''
+  const fallback = `/repo/${id}/explorer${parent ? `?path=${encodeURIComponent(parent)}` : ''}`
+
   return (
     <>
-      <Breadcrumb repoId={id} path={path} isFile={kind === 'file'} />
+      <div className="breadcrumb">
+        {path && <BackButton fallback={fallback} />}
+        <Breadcrumb repoId={id} path={path} isFile={kind === 'file'} />
+      </div>
       {kind === 'file' ? <FileDetail path={path} /> : <DirListing path={path} />}
     </>
   )
@@ -26,7 +33,7 @@ function Breadcrumb({ repoId, path, isFile }) {
   const leaf = isFile ? crumbs[crumbs.length - 1] : null
   let acc = ''
   return (
-    <div className="breadcrumb">
+    <>
       <Link to={`/repo/${repoId}/explorer`}>root</Link>
       {visible.map((seg) => {
         acc = acc ? `${acc}/${seg}` : seg
@@ -43,7 +50,7 @@ function Breadcrumb({ repoId, path, isFile }) {
           <span className="muted">/</span> <span className="mono">{leaf}</span>
         </span>
       )}
-    </div>
+    </>
   )
 }
 
@@ -72,8 +79,8 @@ function DirListing({ path }) {
         <thead>
           <tr>
             <th>Name</th><th className="right">Churn λ</th><th className="right">Growth δ</th>
-            <th className="right">Modifications</th><th className="right">Freq n/|H|</th>
-            <th className="right">Rate λ/|H|</th><th>Top author</th>
+            <th className="right">Modifications</th><th className="right">Frequency n/|H|</th>
+            <th className="right">Churn rate λ/|H|</th><th>Top author</th>
           </tr>
         </thead>
         <tbody>
@@ -91,7 +98,7 @@ function DirListing({ path }) {
                 )}
               </td>
               <td className="right">{fmt(r.churn)}</td>
-              <td className={`right ${r.growth >= 0 ? '' : ''}`}>{fmt(r.growth)}</td>
+              <td className={`right ${r.growth >= 0 ? 'pos' : 'neg'}`}>{fmt(r.growth)}</td>
               <td className="right">{fmt(r.modifications)}</td>
               <td className="right">{fmtFloat(r.modification_frequency, 4)}</td>
               <td className="right">{fmtFloat(r.churn_rate)}</td>
@@ -119,6 +126,8 @@ function FileDetail({ path }) {
   const [hasNext, setHasNext] = useState(false)
   const [err, setErr] = useState('')
   const pkey = JSON.stringify(params)
+
+  useEffect(() => { setPage(0) }, [path, pkey])
 
   useEffect(() => {
     let alive = true
@@ -179,7 +188,7 @@ function FileDetail({ path }) {
                   <td>{a.name}<div className="muted mono">{a.email}</div></td>
                   <td className="right">{fmt(a.added)}</td>
                   <td className="right">{fmt(a.removed)}</td>
-                  <td className="right">{fmt(a.growth)}</td>
+                  <td className={`right ${a.growth >= 0 ? 'pos' : 'neg'}`}>{fmt(a.growth)}</td>
                   <td className="right">{fmt(a.churn)}</td>
                   <td className="right">{fmtPct(a.ownership)}</td>
                 </tr>

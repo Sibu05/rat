@@ -68,6 +68,7 @@ export default function RepoLayout() {
   return (
     <>
       <div className="topbar">
+        <Link to="/" className="back-btn">← Repositories</Link>
         <div className="brand"><Link to="/">RAT</Link> <span>/ {repo?.name ?? '…'}</span></div>
         <div className="spacer" />
         {repo && (

@@ -47,6 +47,8 @@ h2 { font-size: 15px; margin: 0 0 12px; color: var(--muted); text-transform: upp
 .muted { color: var(--muted); }
 .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; }
 .right { text-align: right; }
+.pos { color: var(--green); }
+.neg { color: var(--red); }
 
 button {
   background: var(--panel-2); color: var(--text);
@@ -111,6 +113,14 @@ table.data td.wrap { white-space: normal; }
 
 .breadcrumb { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
 .breadcrumb a { font-weight: 600; }
+
+.back-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--panel-2); color: var(--text);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 4px 10px; font-size: 13px; font-weight: 600;
+}
+.back-btn:hover { border-color: var(--accent); text-decoration: none; }
 
 .bar-track { background: var(--panel-2); border-radius: 4px; height: 8px; width: 120px; overflow: hidden; display: inline-block; vertical-align: middle; }
 .bar-fill { height: 100%; background: var(--accent); }

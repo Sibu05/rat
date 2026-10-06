@@ -170,7 +170,7 @@ export default function Overview() {
                 <tr key={d.path}>
                   <td><Link to={`/repo/${repo.id}/explorer?path=${encodeURIComponent(d.path)}`}>{d.name}/</Link></td>
                   <td className="right">{fmt(d.churn)}</td>
-                  <td className="right">{fmt(d.growth)}</td>
+                  <td className={`right ${d.growth >= 0 ? 'pos' : 'neg'}`}>{fmt(d.growth)}</td>
                   <td>
                     {d.top_author ? (
                       <>
